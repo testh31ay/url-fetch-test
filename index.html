@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>100x Fetch Test</title>
+    <title>100x Automatic Fetch Test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,18 +21,6 @@
         h1 {
             color: #333;
         }
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
         #status {
             margin-top: 15px;
             padding: 10px;
@@ -46,14 +34,15 @@
 <body>
 
     <div class="container">
-        <h1>URL Fetch Test (100 Times)</h1>
+        <h1>Automatic URL Fetch Test (100 Times)</h1>
         <p>
             **Target URL:** `https://mixboard.google.com/projects/new`
             <br>
-            **Note:** Due to browser security (CORS), these requests will likely **fail** and show an error in your browser's **Developer Console**.
+            **Status:** Requests are starting automatically now.
+            <br>
+            **Note:** Due to browser security (**CORS**), these requests will likely **fail** and show an error in your browser's **Developer Console** (Press F12).
         </p>
-        <button onclick="startFetching()">Start 100 Requests</button>
-        <div id="status">Click "Start 100 Requests" to begin. Results will be logged here and in the browser console.</div>
+        <div id="status">Starting 100 requests... Please wait and check the browser console (F12).</div>
     </div>
 
     <script>
@@ -63,8 +52,7 @@
 
         async function fetchUrl(index) {
             try {
-                // The 'no-cors' mode bypasses CORS errors in the console but makes the response unusable (opaque).
-                // We are keeping it default to 'cors' so the console shows the actual security error if it occurs.
+                // Request is made here.
                 const response = await fetch(TARGET_URL);
 
                 if (response.ok) {
@@ -75,7 +63,7 @@
                     return `❌ Request ${index + 1} Failed. Status: ${response.status}`;
                 }
             } catch (error) {
-                // This catch block handles network errors and, most importantly, the CORS security error.
+                // This handles CORS or general network errors.
                 console.error(`Request ${index + 1} Failed (CORS/Network Error):`, error.message);
                 return `🚨 Request ${index + 1} Failed (CORS/Network Error). See console for details.`;
             }
@@ -87,9 +75,11 @@
             const results = [];
             
             for (let i = 0; i < NUMBER_OF_REQUESTS; i++) {
-                const result = await fetchUrl(i); // Wait for each request to complete
+                // We use await to ensure requests happen sequentially, one after the other.
+                const result = await fetchUrl(i); 
                 results.push(result);
-                // Update the status display every 10 requests for performance, or at the end
+                
+                // Update the status display every 10 requests to show progress
                 if ((i + 1) % 10 === 0 || i === NUMBER_OF_REQUESTS - 1) {
                     statusElement.innerHTML = `**Progress: ${i + 1}/${NUMBER_OF_REQUESTS} completed.**\n\n${results.slice(i - 9).join('\n')}`;
                 }
@@ -97,6 +87,10 @@
             
             statusElement.innerHTML = `**FINISHED!** 100 requests attempted. See the browser console for complete logs.\n\n${results.join('\n')}`;
         }
+
+        // --- AUTOMATIC EXECUTION LINE ---
+        startFetching();
+
     </script>
 
 </body>
