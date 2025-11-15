@@ -1,20 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Auto GET Requests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sending GET requests</title>
+    <script>
+        // Ping rate: 1 ping every 0.1 seconds 
+        const pingInterval = 100; // 1000 milliseconds = 1 seconds
+        const targetHost = 'https://mixboard.google.com/projects/new'; // Replace with your target server URL
+
+        let pingCount = 0;  // To track how many pings have been sent
+
+        // Function to simulate sending a ping via an HTTP request
+        function sendPing() {
+            fetch(targetHost)
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`Ping #${pingCount + 1}: Successful`);
+                    } else {
+                        console.log(`Ping #${pingCount + 1}: Failed with status ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.log(`Ping #${pingCount + 1}: Failed with error: ${error}`);
+                });
+
+            pingCount++;  // Increment the ping counter
+            console.log(`Ping count: ${pingCount}`);
+        }
+
+        // Start sending pings every 6 seconds
+        function startPinging() {
+            setInterval(sendPing, pingInterval);
+        }
+
+        // Begin pinging as soon as the page is loaded
+        window.onload = startPinging;
+    </script>
 </head>
 <body>
-    <h2>Sending GET requests</h2>
-
-    <script>
-        const targetUrl = "https://mixboard.google.com/projects/new";
-
-        // Send 100 GET requests automatically
-        for (let i = 0; i < 100; i++) {
-            fetch(targetUrl, { method: "GET", mode: "no-cors" })
-                .catch(err => console.log("Request error:", err));
-        }
-    </script>
+    <h1>Bug Bounty</h1>
 </body>
 </html>
