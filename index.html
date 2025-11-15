@@ -1,44 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sending GET requests</title>
-    <script>
-        // Ping rate: 1 ping every 0.1 seconds 
-        const pingInterval = 100; // 1000 milliseconds = 1 seconds
-        const targetHost = 'https://mixboard.google.com/projects/new'; // Replace with your target server URL
-
-        let pingCount = 0;  // To track how many pings have been sent
-
-        // Function to simulate sending a ping via an HTTP request
-        function sendPing() {
-            fetch(targetHost)
-                .then(response => {
-                    if (response.ok) {
-                        console.log(`Ping #${pingCount + 1}: Successful`);
-                    } else {
-                        console.log(`Ping #${pingCount + 1}: Failed with status ${response.status}`);
-                    }
-                })
-                .catch(error => {
-                    console.log(`Ping #${pingCount + 1}: Failed with error: ${error}`);
-                });
-
-            pingCount++;  // Increment the ping counter
-            console.log(`Ping count: ${pingCount}`);
-        }
-
-        // Start sending pings every 6 seconds
-        function startPinging() {
-            setInterval(sendPing, pingInterval);
-        }
-
-        // Begin pinging as soon as the page is loaded
-        window.onload = startPinging;
-    </script>
+    <title>Fetch</title>
 </head>
 <body>
-    <h1>Bug Bounty</h1>
+
+<h2>Fetching URL with JavaScript…</h2>
+
+<iframe id="myframe" style="width:100%;height:400px;"></iframe>
+
+<script>
+    async function loadIntoIframe() {
+        const url = "https://mixboard.google.com/projects/new"; // URL to fetch
+
+        try {
+            const response = await fetch(url);
+            const text = await response.text(); // get HTML text
+
+            // load into iframe
+            const iframe = document.getElementById("myframe");
+            iframe.srcdoc = text;   // insert HTML directly
+        } catch (err) {
+            console.error("Fetch error:", err);
+        }
+    }
+
+    // Run automatically when page opens
+    loadIntoIframe();
+</script>
+
 </body>
 </html>
