@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Auto Tab Opener</title>
+  <meta charset="UTF-8">
+  <title>Local Auto Tab Opener</title>
   <script>
-    window.onload = function () {
+    document.addEventListener("DOMContentLoaded", function () {
       const url = "https://mixboard.google.com/projects/new";
+
+      // open 10 tabs
       for (let i = 0; i < 10; i++) {
         window.open(url, "_blank");
       }
-    };
+    });
   </script>
 </head>
 <body>
-  <h1>Opening tabs...</h1>
+  <h1>Opening 10 tabs...</h1>
 </body>
 </html>
