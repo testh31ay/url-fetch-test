@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100x Fetch Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #status {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            white-space: pre-wrap; /* Preserve line breaks */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>URL Fetch Test (100 Times)</h1>
+        <p>
+            **Target URL:** `https://mixboard.google.com/projects/new`
+            <br>
+            **Note:** Due to browser security (CORS), these requests will likely **fail** and show an error in your browser's **Developer Console**.
+        </p>
+        <button onclick="startFetching()">Start 100 Requests</button>
+        <div id="status">Click "Start 100 Requests" to begin. Results will be logged here and in the browser console.</div>
+    </div>
+
+    <script>
+        const TARGET_URL = 'https://mixboard.google.com/projects/new';
+        const NUMBER_OF_REQUESTS = 100;
+        const statusElement = document.getElementById('status');
+
+        async function fetchUrl(index) {
+            try {
+                // The 'no-cors' mode bypasses CORS errors in the console but makes the response unusable (opaque).
+                // We are keeping it default to 'cors' so the console shows the actual security error if it occurs.
+                const response = await fetch(TARGET_URL);
+
+                if (response.ok) {
+                    console.log(`Request ${index + 1} Succeeded! Status: ${response.status}`);
+                    return `✅ Request ${index + 1} Succeeded! Status: ${response.status}`;
+                } else {
+                    console.error(`Request ${index + 1} Failed with status: ${response.status}`);
+                    return `❌ Request ${index + 1} Failed. Status: ${response.status}`;
+                }
+            } catch (error) {
+                // This catch block handles network errors and, most importantly, the CORS security error.
+                console.error(`Request ${index + 1} Failed (CORS/Network Error):`, error.message);
+                return `🚨 Request ${index + 1} Failed (CORS/Network Error). See console for details.`;
+            }
+        }
+
+        async function startFetching() {
+            statusElement.innerHTML = 'Starting 100 requests... Please wait and check the browser console (F12).';
+            
+            const results = [];
+            
+            for (let i = 0; i < NUMBER_OF_REQUESTS; i++) {
+                const result = await fetchUrl(i); // Wait for each request to complete
+                results.push(result);
+                // Update the status display every 10 requests for performance, or at the end
+                if ((i + 1) % 10 === 0 || i === NUMBER_OF_REQUESTS - 1) {
+                    statusElement.innerHTML = `**Progress: ${i + 1}/${NUMBER_OF_REQUESTS} completed.**\n\n${results.slice(i - 9).join('\n')}`;
+                }
+            }
+            
+            statusElement.innerHTML = `**FINISHED!** 100 requests attempted. See the browser console for complete logs.\n\n${results.join('\n')}`;
+        }
+    </script>
+
+</body>
+</html>
