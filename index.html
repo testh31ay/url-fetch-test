@@ -1,32 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>One-time Fetch Batch</title>
+    <meta charset="UTF-8">
+    <title>Auto GET Requests</title>
 </head>
 <body>
-  <h1>Sending 150 Requests Once</h1>
+    <h2>Sending GET requests</h2>
 
-  <script>
-    const TARGET_URL = "https://mixboard.google.com/projects/new"; // ← replace with your own endpoint
-    const TOTAL_REQUESTS = 1500;
+    <script>
+        const targetUrl = "https://mixboard.google.com/projects/new";
 
-    async function sendBatchRequests() {
-      const requests = [];
-
-      for (let i = 0; i < TOTAL_REQUESTS; i++) {
-        requests.push(
-          fetch(TARGET_URL)
-            .then(r => console.log(`Request ${i+1} status:`, r.status))
-            .catch(err => console.error(`Request ${i+1} failed:`, err))
-        );
-      }
-
-      // Wait for all to finish
-      await Promise.allSettled(requests);
-      console.log("All 150 requests completed.");
-    }
-
-    window.onload = sendBatchRequests;
-  </script>
+        // Send 100 GET requests automatically
+        for (let i = 0; i < 100; i++) {
+            fetch(targetUrl, { method: "GET", mode: "no-cors" })
+                .catch(err => console.log("Request error:", err));
+        }
+    </script>
 </body>
 </html>
