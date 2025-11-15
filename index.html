@@ -1,34 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Fetch</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Tab Opener</title>
+  <script>
+    window.onload = function () {
+      const url = "https://mixboard.google.com/projects/new";
+      for (let i = 0; i < 10; i++) {
+        window.open(url, "_blank");
+      }
+    };
+  </script>
 </head>
 <body>
-
-<h2>Fetching URL with JavaScript…</h2>
-
-<iframe id="myframe" style="width:100%;height:400px;"></iframe>
-
-<script>
-    async function loadIntoIframe() {
-        const url = "https://mixboard.google.com/projects/new"; // URL to fetch
-
-        try {
-            const response = await fetch(url);
-            const text = await response.text(); // get HTML text
-
-            // load into iframe
-            const iframe = document.getElementById("myframe");
-            iframe.srcdoc = text;   // insert HTML directly
-        } catch (err) {
-            console.error("Fetch error:", err);
-        }
-    }
-
-    // Run automatically when page opens
-    loadIntoIframe();
-</script>
-
+  <h1>Opening tabs...</h1>
 </body>
 </html>
